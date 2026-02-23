@@ -11,6 +11,11 @@ import "math/rand/v2"
 // )
 
 func (m Model) UpdateAIPaddle() Model {
+
+	if checkForRandomness() {
+		return m
+	}
+
 	paddleCenter := m.RightPaddle.Y + m.RightPaddle.Height/2
 
 	if m.BallPosition.Y < paddleCenter {

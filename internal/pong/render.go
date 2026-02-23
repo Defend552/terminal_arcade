@@ -3,12 +3,17 @@ package pong
 import (
 	"fmt"
 	"strings"
+	"terminal_arcade/internal/utils"
 )
 
 func View(m Model) string {
 	var b strings.Builder
 
 	b.WriteString("Terminal Pong\n\n")
+
+	if m.CheckIfGameIsOver() {
+		return m.PrintGameOverScreen()
+	}
 
 	sideBarWidth := 25
 	totalBoardWidth := m.Board.Width + 2
@@ -83,4 +88,19 @@ func (m Model) PrintGameState(y int) string {
 	default:
 		return ""
 	}
+}
+
+func (m Model) PrintGameOverScreen() string {
+	var b strings.Builder
+	b.WriteString(utils.RenderASCII("WINNER"))
+	b.WriteString("\n")
+	b.WriteString(utils.RenderASCII("SCORE"))
+	b.WriteString("\n")
+	b.WriteString(utils.RenderASCII(fmt.Sprintf("%d - %d", m.Score.Player1, m.Score.Player2)))
+	b.WriteString("\n")
+	b.WriteString("Press r to restart game\n")
+	b.WriteString("\n")
+	b.WriteString("Press CTRL-c or q to exit\n")
+
+	return b.String()
 }

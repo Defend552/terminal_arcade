@@ -22,6 +22,10 @@ func (m Model) UpdateOnTick() (Model, tea.Cmd) {
 }
 
 func (m Model) UpdateBallPosition() Model {
+	if m.CheckIfGameIsOver() {
+		return m
+	}
+
 	m = m.MoveBall()
 	m = m.TopBottomCollision()
 
@@ -36,12 +40,12 @@ func (m Model) UpdateBallPosition() Model {
 	}
 
 	if m.BallPosition.X > m.Board.Width {
-		m.Score.Player2++
+		m.Score.Player1++
 		m = m.ResetBall()
 		return m
 	}
 	if m.BallPosition.X < 0 {
-		m.Score.Player1++
+		m.Score.Player2++
 		m = m.ResetBall()
 		return m
 	}
@@ -83,4 +87,8 @@ func (m Model) CheckIfRightPaddleIsHit() bool {
 		m.BallPosition.X >= m.Board.Width-3 &&
 		m.BallPosition.Y >= m.RightPaddle.Y &&
 		m.BallPosition.Y < m.RightPaddle.Y+m.RightPaddle.Height
+}
+
+func (m Model) CheckIfGameIsOver() bool {
+	return m.Score.Player1 > 1 || m.Score.Player2 > 1
 }

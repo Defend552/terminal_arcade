@@ -8,8 +8,8 @@ import (
 func New() Model {
 	items := []list.Item{
 		item("Pong"),
-		item("Tetris"),
-		item("Pac-Man"),
+		// item("Tetris"),
+		// item("Pac-Man"),
 	}
 
 	l := list.New(items, itemDelegate{}, 20, 14)

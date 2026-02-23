@@ -23,7 +23,12 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tea.KeyMsg:
-		return HandleKey(m, msg)
+		switch msg.String() {
+		case "r":
+			return StartGame(), nil
+		default:
+			return HandleKey(m, msg)
+		}
 
 	case tickMsg:
 		return m.UpdateOnTick()

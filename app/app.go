@@ -1,8 +1,8 @@
 package app
 
 import (
-	"terminal_arcade/menu"
-	"terminal_arcade/pong"
+	"terminal_arcade/internal/menu"
+	"terminal_arcade/internal/pong"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
