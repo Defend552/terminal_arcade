@@ -27,4 +27,5 @@ type Model struct {
 	LeftPaddle   Paddle
 	Board        GameBoard
 	Score        ScoreBoard
+	ScoreToWin   int
 }

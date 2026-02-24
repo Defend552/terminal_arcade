@@ -92,7 +92,11 @@ func (m Model) PrintGameState(y int) string {
 
 func (m Model) PrintGameOverScreen() string {
 	var b strings.Builder
-	b.WriteString(utils.RenderASCII("WINNER"))
+	if m.Score.Player1 == m.ScoreToWin {
+		b.WriteString(utils.RenderASCII("WINNER"))
+	} else {
+		b.WriteString(utils.RenderASCII("LOSER"))
+	}
 	b.WriteString("\n")
 	b.WriteString(utils.RenderASCII("SCORE"))
 	b.WriteString("\n")

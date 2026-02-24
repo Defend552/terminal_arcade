@@ -12,6 +12,7 @@ func StartGame() Model {
 		LeftPaddle:   Paddle{Y: 20, Height: 4},
 		Board:        GameBoard{Height: 24, Width: 80},
 		Score:        ScoreBoard{Player1: 0, Player2: 0},
+		ScoreToWin:   5,
 	}
 }
 

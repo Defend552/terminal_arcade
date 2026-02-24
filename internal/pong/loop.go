@@ -90,5 +90,5 @@ func (m Model) CheckIfRightPaddleIsHit() bool {
 }
 
 func (m Model) CheckIfGameIsOver() bool {
-	return m.Score.Player1 > 1 || m.Score.Player2 > 1
+	return m.Score.Player1 > m.ScoreToWin || m.Score.Player2 > m.ScoreToWin
 }
