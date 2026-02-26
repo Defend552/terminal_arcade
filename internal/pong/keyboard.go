@@ -1,6 +1,8 @@
 package pong
 
 import (
+	listcomponent "terminal_arcade/internal/list_component"
+
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -12,6 +14,13 @@ var keyActions = map[string]func(*Model) tea.Cmd{
 	"q":    func(m *Model) tea.Cmd { return tea.Quit },
 	"ctrl+c": func(m *Model) tea.Cmd {
 		return tea.Quit
+	},
+	"enter": func(m *Model) tea.Cmd {
+		if m.Difficulty == Select {
+			SelectDifficulty(m)
+			return nil
+		}
+		return nil
 	},
 }
 
@@ -37,5 +46,18 @@ func PaddleUp(p *Paddle) {
 func PaddleDown(p *Paddle, board *GameBoard) {
 	if p.Y < board.Height-4 {
 		p.Y++
+	}
+}
+
+func SelectDifficulty(m *Model) {
+	selected := listcomponent.SelectedString(m.DifficultyList)
+
+	switch selected {
+	case "Easy":
+		m.Difficulty = Easy
+	case "Medium":
+		m.Difficulty = Medium
+	case "Hard":
+		m.Difficulty = Hard
 	}
 }

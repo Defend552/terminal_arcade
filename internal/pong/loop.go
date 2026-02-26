@@ -8,17 +8,19 @@ import (
 
 type tickMsg time.Time
 
-func Tick() tea.Cmd {
-	return tea.Tick(time.Millisecond*50, func(t time.Time) tea.Msg {
+func Tick(m Model) tea.Cmd {
+	speed := time.Millisecond * 50
+	if m.Difficulty == Hard {
+		speed = time.Millisecond * 25
+	}
+	return tea.Tick(speed, func(t time.Time) tea.Msg {
 		return tickMsg(t)
 	})
 }
 
 func (m Model) UpdateOnTick() (Model, tea.Cmd) {
 	m = m.UpdateBallPosition()
-	return m, tea.Tick(time.Millisecond*50, func(t time.Time) tea.Msg {
-		return tickMsg(t)
-	})
+	return m, Tick(m)
 }
 
 func (m Model) UpdateBallPosition() Model {
@@ -90,5 +92,5 @@ func (m Model) CheckIfRightPaddleIsHit() bool {
 }
 
 func (m Model) CheckIfGameIsOver() bool {
-	return m.Score.Player1 > m.ScoreToWin || m.Score.Player2 > m.ScoreToWin
+	return m.Score.Player1 == m.ScoreToWin || m.Score.Player2 == m.ScoreToWin || m.Difficulty == Select
 }

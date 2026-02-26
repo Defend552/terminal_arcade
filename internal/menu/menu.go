@@ -1,21 +1,21 @@
 package menu
 
 import (
-	"github.com/charmbracelet/bubbles/list"
+	listcomponent "terminal_arcade/internal/list_component"
+
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 func New() Model {
-	items := []list.Item{
-		item("Pong"),
-		// item("Tetris"),
-		// item("Pac-Man"),
-	}
-
-	l := list.New(items, itemDelegate{}, 20, 14)
-	l.Title = "Select a Game"
-	l.SetShowStatusBar(false)
-	l.SetFilteringEnabled(false)
+	l := listcomponent.New(
+		"Select a Game",
+		[]string{
+			"Pong",
+			"Tetris",
+			"Pac-Man",
+		},
+		20,
+	)
 
 	return Model{List: l}
 }
@@ -29,7 +29,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		if msg.String() == "enter" {
-			if i, ok := m.List.SelectedItem().(item); ok {
+			if i, ok := m.List.SelectedItem().(listcomponent.Item); ok {
 				m.Choice = string(i)
 			}
 		}

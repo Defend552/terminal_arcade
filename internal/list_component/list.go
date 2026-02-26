@@ -1,4 +1,4 @@
-package menu
+package list_component
 
 import (
 	"fmt"
@@ -6,12 +6,13 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/bubbles/list"
+	bubbles "github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
-type item string
-type itemDelegate struct{}
+type Item string
+type ItemDelegate struct{}
 
 const listHeight = 14
 
@@ -24,22 +25,24 @@ var (
 	quitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
 )
 
-func (i item) FilterValue() string { return "" }
+func (i Item) FilterValue() string {
+	return string(i)
+}
 
-func (d itemDelegate) Height() int {
+func (d ItemDelegate) Height() int {
 	return 1
 }
 
-func (d itemDelegate) Spacing() int {
+func (d ItemDelegate) Spacing() int {
 	return 0
 }
 
-func (d itemDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd {
+func (d ItemDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd {
 	return nil
 }
 
-func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	i, ok := listItem.(item)
+func (d ItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+	i, ok := listItem.(Item)
 	if !ok {
 		return
 	}
@@ -56,17 +59,35 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	fmt.Fprint(w, fn(str))
 }
 
-func NewMenu() Model {
-	items := []list.Item{
-		item("Pong"),
-		item("Tetris"),
-		item("Pac-Man"),
-	}
+func New(title string, items []string, width int) bubbles.Model {
+	l := bubbles.New(
+		toItems(items),
+		ItemDelegate{},
+		width,
+		listHeight,
+	)
 
-	l := list.New(items, itemDelegate{}, 20, listHeight)
-	l.Title = "Select a Game"
+	l.Title = title
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(false)
+	l.SetShowHelp(false)
+	l.Styles.Title = titleStyle
 
-	return Model{List: l}
+	return l
+}
+
+func toItems(strs []string) []bubbles.Item {
+	items := make([]bubbles.Item, len(strs))
+	for i, s := range strs {
+		items[i] = Item(s)
+	}
+	return items
+}
+
+func SelectedString(l list.Model) string {
+	selected, ok := l.SelectedItem().(Item)
+	if !ok {
+		return ""
+	}
+	return string(selected)
 }

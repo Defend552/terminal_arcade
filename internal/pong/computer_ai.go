@@ -12,7 +12,7 @@ import "math/rand/v2"
 
 func (m Model) UpdateAIPaddle() Model {
 
-	if checkForRandomness() {
+	if checkForRandomness(m) {
 		return m
 	}
 
@@ -53,8 +53,12 @@ func predictBallY(m Model) int {
 	return y
 }
 
-func checkForRandomness() bool {
-	return rand.Float32() < 0.15
+func checkForRandomness(m Model) bool {
+	chances := 0.15
+	if m.Difficulty == Easy {
+		chances = 0.25
+	}
+	return rand.Float32() < float32(chances)
 }
 
 // targetY := predictBallY(m)

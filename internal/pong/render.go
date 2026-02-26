@@ -6,10 +6,14 @@ import (
 	"terminal_arcade/internal/utils"
 )
 
-func View(m Model) string {
+func Render(m Model) string {
 	var b strings.Builder
 
 	b.WriteString("Terminal Pong\n\n")
+
+	if m.Difficulty == Select {
+		return "\n" + m.DifficultyList.View()
+	}
 
 	if m.CheckIfGameIsOver() {
 		return m.PrintGameOverScreen()
@@ -85,8 +89,25 @@ func (m Model) PrintGameState(y int) string {
 		return fmt.Sprintf("Left Paddle Y: %d", m.LeftPaddle.Y)
 	case 5:
 		return fmt.Sprintf("Right Paddle Y: %d", m.RightPaddle.Y)
+	case 6:
+		return fmt.Sprintf("Game Difficulty: %s", DifficultyToString(m.Difficulty))
 	default:
 		return ""
+	}
+}
+
+func DifficultyToString(d Difficulty) string {
+	switch d {
+	case Select:
+		return "Select"
+	case Easy:
+		return "Easy"
+	case Medium:
+		return "Medium"
+	case Hard:
+		return "Hard"
+	default:
+		return "Unknown"
 	}
 }
 
