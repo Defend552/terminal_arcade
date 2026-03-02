@@ -8,9 +8,9 @@ import (
 
 var keyActions = map[string]func(*Model) tea.Cmd{
 	"up":   func(m *Model) tea.Cmd { PaddleUp(&m.LeftPaddle); return nil },
-	"k":    func(m *Model) tea.Cmd { PaddleUp(&m.LeftPaddle); return nil },
+	"w":    func(m *Model) tea.Cmd { PaddleUp(&m.LeftPaddle); return nil },
 	"down": func(m *Model) tea.Cmd { PaddleDown(&m.LeftPaddle, &m.Board); return nil },
-	"j":    func(m *Model) tea.Cmd { PaddleDown(&m.LeftPaddle, &m.Board); return nil },
+	"s":    func(m *Model) tea.Cmd { PaddleDown(&m.LeftPaddle, &m.Board); return nil },
 	"q":    func(m *Model) tea.Cmd { return tea.Quit },
 	"ctrl+c": func(m *Model) tea.Cmd {
 		return tea.Quit

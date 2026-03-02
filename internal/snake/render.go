@@ -1,4 +1,4 @@
-package pong
+package snake
 
 import (
 	"fmt"
@@ -9,11 +9,7 @@ import (
 func Render(m Model) string {
 	var b strings.Builder
 
-	b.WriteString("Terminal Pong\n\n")
-
-	if m.Difficulty == Select {
-		return "\n" + m.DifficultyList.View()
-	}
+	b.WriteString("Terminal Snake\n\n")
 
 	if m.CheckIfGameIsOver() {
 		return m.PrintGameOverScreen()
@@ -44,23 +40,14 @@ func Render(m Model) string {
 			gameY := y - 1
 
 			switch {
-			//makes the pong paddles
-			case gameX == 2 &&
-				gameY >= m.LeftPaddle.Y &&
-				gameY < m.LeftPaddle.Y+m.LeftPaddle.Height:
-				b.WriteString("|")
-
-			case gameX == m.Board.Width-3 &&
-				gameY >= m.RightPaddle.Y &&
-				gameY < m.RightPaddle.Y+m.RightPaddle.Height:
-				b.WriteString("|")
-
-			//makes the ball
-			case gameX == m.BallPosition.X &&
-				gameY == m.BallPosition.Y:
-				b.WriteString("O")
-
-			//generates the game state
+			case gameX == m.Snake[0].X &&
+				gameY == m.Snake[0].Y:
+				b.WriteString(PrintHead(m.LastMove))
+			case m.isBody(gameX, gameY):
+				b.WriteString("o")
+			case gameX == m.Food.X &&
+				gameY == m.Food.Y:
+				b.WriteString("X")
 			case gameX == totalBoardWidth+2:
 				sidebarLine := m.PrintGameState(y)
 				fmt.Fprintf(&b, "%-*s", sideBarWidth, sidebarLine)
@@ -71,7 +58,6 @@ func Render(m Model) string {
 		b.WriteString("\n")
 	}
 
-	fmt.Fprintf(&b, "\nScore: %d - %d\n", m.Score.Player1, m.Score.Player2)
 	b.WriteString("Press CTRL-c or q to exit\n")
 
 	return b.String()
@@ -82,15 +68,15 @@ func (m Model) PrintGameState(y int) string {
 	case 1:
 		return "Game State Values"
 	case 2:
-		return fmt.Sprintf("Ball Position: (%d,%d)", m.BallPosition.X, m.BallPosition.Y)
+		return fmt.Sprintf("Snake: (%d,%d)", m.Snake[0].X, m.Snake[0].Y)
 	case 3:
-		return fmt.Sprintf("Ball Velocity: (%d,%d)", m.BallVelocity.X, m.BallVelocity.Y)
+		return fmt.Sprintf("Last Move %s", DifficultyToString(m.LastMove))
 	case 4:
-		return fmt.Sprintf("Left Paddle Y: %d", m.LeftPaddle.Y)
-	case 5:
-		return fmt.Sprintf("Right Paddle Y: %d", m.RightPaddle.Y)
-	case 6:
-		return fmt.Sprintf("Game Difficulty: %s", DifficultyToString(m.Difficulty))
+		if m.SnakeTail != nil {
+			return fmt.Sprintf("Snake Tail: (%d,%d)", m.SnakeTail.X, m.SnakeTail.Y)
+		} else {
+			return ""
+		}
 	default:
 		return ""
 	}
@@ -98,15 +84,11 @@ func (m Model) PrintGameState(y int) string {
 
 func (m Model) PrintGameOverScreen() string {
 	var b strings.Builder
-	if m.Score.Player1 == m.ScoreToWin {
+	if m.CheckIfGameIsWon() {
 		b.WriteString(utils.RenderASCII("You Won!"))
 	} else {
 		b.WriteString(utils.RenderASCII("You Lost"))
 	}
-	b.WriteString("\n")
-	b.WriteString(utils.RenderASCII("SCORE"))
-	b.WriteString("\n")
-	b.WriteString(utils.RenderASCII(fmt.Sprintf("%d - %d", m.Score.Player1, m.Score.Player2)))
 	b.WriteString("\n")
 	b.WriteString("Press r to restart game\n")
 	b.WriteString("\n")

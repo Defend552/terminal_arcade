@@ -2,14 +2,6 @@ package pong
 
 import "math/rand/v2"
 
-// type Difficulty int
-//
-// const (
-// 	Easy Difficulty = iota
-// 	Medium
-// 	Hard
-// )
-
 func (m Model) UpdateAIPaddle() Model {
 
 	if checkForRandomness(m) {
@@ -24,7 +16,6 @@ func (m Model) UpdateAIPaddle() Model {
 		m.RightPaddle.Y++
 	}
 
-	// clamp to board
 	if m.RightPaddle.Y < 0 {
 		m.RightPaddle.Y = 0
 	}
@@ -60,12 +51,3 @@ func checkForRandomness(m Model) bool {
 	}
 	return rand.Float32() < float32(chances)
 }
-
-// targetY := predictBallY(m)
-// paddleCenter := m.RightPaddle.Y + m.RightPaddle.Height/2
-//
-// if targetY < paddleCenter {
-// 	m.RightPaddle.Y--
-// } else if targetY > paddleCenter {
-// 	m.RightPaddle.Y++
-// }
