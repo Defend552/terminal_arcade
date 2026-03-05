@@ -56,15 +56,15 @@ func (m Model) MoveSnakeLastMove() Model {
 func (m Model) DoesSnakeGrow() Model {
 	snake_head := m.Snake[0]
 	if m.Food.X == snake_head.X && m.Food.Y == snake_head.Y {
-		m.Food = GenerateFood()
+		m.Food = GenerateFood(m.Snake, m.Board)
 		m.Snake = append(m.Snake, *m.SnakeTail)
 	}
 	return m
 }
 
-// TODO: Need to update logic so it will check if the food can't be generated any more
 func (m Model) CheckIfGameIsWon() bool {
-	return false
+	avaliable_spaces := m.Board.Height * m.Board.Width
+	return avaliable_spaces == len(m.Snake)
 }
 
 func (m Model) CheckIfGameIsOver() bool {
@@ -74,8 +74,8 @@ func (m Model) CheckIfGameIsOver() bool {
 func (m Model) CheckForCollisions() bool {
 	head := m.Snake[0]
 
-	for i := 1; i < len(m.Snake); i++ {
-		if m.Snake[i] == head {
+	for i := range len(m.Snake) {
+		if m.Snake[i] == head && i != 0 {
 			return true
 		}
 	}
@@ -83,7 +83,7 @@ func (m Model) CheckForCollisions() bool {
 }
 
 func (m Model) isBody(x, y int) bool {
-	for i := 1; i < len(m.Snake); i++ {
+	for i := range len(m.Snake) {
 		if m.Snake[i].X == x && m.Snake[i].Y == y {
 			return true
 		}

@@ -72,6 +72,8 @@ func (m Model) PrintGameState(y int) string {
 	case 3:
 		return fmt.Sprintf("Last Move %s", DifficultyToString(m.LastMove))
 	case 4:
+		return fmt.Sprintf("Food Location (%d,%d)", m.Food.X, m.Food.Y)
+	case 5:
 		if m.SnakeTail != nil {
 			return fmt.Sprintf("Snake Tail: (%d,%d)", m.SnakeTail.X, m.SnakeTail.Y)
 		} else {
