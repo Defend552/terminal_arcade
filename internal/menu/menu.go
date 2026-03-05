@@ -11,8 +11,7 @@ func New() Model {
 		"Select a Game",
 		[]string{
 			"Pong",
-			"Tetris",
-			"Pac-Man",
+			"Snake",
 		},
 		20,
 	)
